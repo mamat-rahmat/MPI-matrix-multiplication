@@ -5,36 +5,23 @@
 
 #define N 4
 
-/* global */
-/*
-int a[N][N] = {
-    { 1, 2, 3, 4 },
-    { 5, 6, 7, 8 },
-    { 9, 10, 11, 12 },
-    { 13, 14, 15, 16 } 
-};
-
-int b[N][N] = {
-    { 17, 18, 19, 20 },
-    { 21, 22, 23, 24 },
-    { 25, 26, 27, 28 },
-    { 29, 30, 31, 32 },
-};
-
-int c[N][N];
-*/
-
-int a[N*N], b[N*N], c[N*N];
-
 int main(int argc, char *argv[])
 {
-	int rank, size, i, j, k;
+	int* a = NULL;
+	int *b = NULL;
+	int *c = NULL;
+
+	int rank, size;
 	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &size);
 
+	int i, j, k;
+
+	b = malloc(N*N*sizeof(int));
 	if(rank == 0)
 	{
+		a = malloc(N*N*sizeof(int));
 		for(i=0; i<N; i++)
 			for(j=0; j<N; j++)
 				scanf("%d", a+(i*N)+j);
@@ -42,6 +29,8 @@ int main(int argc, char *argv[])
 		for(i=0; i<N; i++)
 			for(j=0; j<N; j++)
 				scanf("%d", b+(i*N)+j);
+
+		c = malloc(N*N*sizeof(int));
 	}
 
 	//elements per process
@@ -49,15 +38,14 @@ int main(int argc, char *argv[])
 
 	// create a buffer that will hold the rows
 	int *row = malloc(sizeof(int) * epp);
-	// create a buffer that will hold the result
-	int *res = malloc(sizeof(int) * epp);
-
 
 	MPI_Scatter(a, epp, MPI_INT, row, epp, MPI_INT, 0, MPI_COMM_WORLD);
 	MPI_Bcast(b, N*N, MPI_INT, 0, MPI_COMM_WORLD);
 
+	// create a buffer that will hold the result
+	int *res = malloc(sizeof(int) * epp);
 	for(i=0; i<epp/N; i++)
-		for(j=0; j<N; j++);
+		for(j=0; j<N; j++)
 		{
 			res[i*N+j] = 0;
 			for(k=0; k<N; k++)
@@ -65,6 +53,9 @@ int main(int argc, char *argv[])
 		}
 
 	MPI_Gather(res, epp, MPI_INT, c, epp, MPI_INT, 0, MPI_COMM_WORLD);
+
+	//synchronize
+	MPI_Barrier(MPI_COMM_WORLD);
 
 	if(rank == 0)
 	{
