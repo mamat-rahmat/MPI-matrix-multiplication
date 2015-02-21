@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "timer.h"
+//#include "timer.h"
 #include "mpi.h"
 
 
@@ -28,11 +28,11 @@ int main(int argc, char *argv[])
   MPI_Status status;
   int me,p;
   int i=0,j,k;
-  double start, finish;
+  //double start, finish;
 
 
   /* Start up MPI */
-  GET_TIME(start);
+  //GET_TIME(start);
 
   MPI_Init(&argc, &argv);
   MPI_Comm_rank(MPI_COMM_WORLD, &me);
@@ -86,11 +86,12 @@ int main(int argc, char *argv[])
 
   MPI_Barrier(MPI_COMM_WORLD);
 
-  GET_TIME(finish);
+  //GET_TIME(finish);
 
-  printf("Elapsed time = %e seconds\n", finish-start);
+  //printf("Elapsed time = %e seconds\n", finish-start);
 
   /* print the matrix */
+  /*
   if (me == 0)
   {
       for (i=0; i<N; i++) {
@@ -100,6 +101,7 @@ int main(int argc, char *argv[])
           printf("|\n");
       }
   }
+  */
   /* Quit */
 
   MPI_Finalize();
