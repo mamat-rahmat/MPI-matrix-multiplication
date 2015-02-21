@@ -2,11 +2,10 @@
 #include <stdlib.h>
 #include "mpi.h"
 
-
-#define N 4
-
 int main(int argc, char *argv[])
 {
+	int N;
+	
 	int* a = NULL;
 	int *b = NULL;
 	int *c = NULL;
@@ -18,19 +17,28 @@ int main(int argc, char *argv[])
 
 	int i, j, k;
 
-	b = malloc(N*N*sizeof(int));
+	
 	if(rank == 0)
 	{
+		scanf("%d", &N);
+		MPI_Bcast(&N, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
 		a = malloc(N*N*sizeof(int));
 		for(i=0; i<N; i++)
 			for(j=0; j<N; j++)
 				scanf("%d", a+(i*N)+j);
-
+		
+		b = malloc(N*N*sizeof(int));
 		for(i=0; i<N; i++)
 			for(j=0; j<N; j++)
 				scanf("%d", b+(i*N)+j);
 
 		c = malloc(N*N*sizeof(int));
+	}
+	else
+	{
+		MPI_Bcast(&N, 1, MPI_INT, 0, MPI_COMM_WORLD);
+		b = malloc(N*N*sizeof(int));
 	}
 
 	//elements per process
