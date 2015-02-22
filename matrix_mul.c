@@ -12,7 +12,11 @@ float diffclock(clock_t clock1,clock_t clock2) //penghitungan waktu
 
 int main(int argc, char *argv[])
 {
-	int N;
+	if (argc != 2) {
+		fprintf(stderr, "Usage: matrixmpi <spasi> ukuan_matriks\n");
+		exit(1);
+	}
+	int N = atoi(argv[1]);
 	
 	int *a = NULL;
 	int *b = NULL;
@@ -30,8 +34,7 @@ int main(int argc, char *argv[])
 	if(rank == 0)
 	{
 		srand(time(NULL));
-		printf("masukkan ukuran matriks: ");
-		scanf("%d", &N);
+		printf("ukuran matriks: %d\n", N);
 		MPI_Bcast(&N, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
 		a = malloc(N*N*sizeof(int));
@@ -53,6 +56,7 @@ int main(int argc, char *argv[])
 				printf("%d ", a[(i*N)+j]);
 			printf("\n");
 		}
+		printf("\n");
 		printf("matriks B:\n");
 		for(i=0; i<N; i++)
 		{
@@ -60,6 +64,7 @@ int main(int argc, char *argv[])
 				printf("%d ", b[(i*N)+j]);
 			printf("\n");
 		}
+		printf("\n");
 		x_startTime=clock();
 	}
 	else
