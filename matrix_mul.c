@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
 	
 	if(rank == 0)
 	{
+		system("clear");
 		srand(time(NULL));
 		printf("ukuran matriks: %d\n", N);
 		MPI_Bcast(&N, 1, MPI_INT, 0, MPI_COMM_WORLD);
