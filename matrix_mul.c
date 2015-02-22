@@ -106,6 +106,7 @@ int main(int argc, char *argv[])
 			printf("\n");
 		}
 		printf("waktu perhitungan: %f milisecond(s)\n", x_milliseconds);
+		printf("jumlah elemen per proses: %d\n", epp);
 	}
 
 	MPI_Finalize();
