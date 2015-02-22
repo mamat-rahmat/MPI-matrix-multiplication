@@ -23,6 +23,11 @@ int main(int argc, char *argv[])
 	int i, j, k;
 	double x_milliseconds=0.0;
 	double x_startTime,x_countTime;
+
+	char processor_name[MPI_MAX_PROCESSOR_NAME];
+	int name_len;
+	MPI_Get_processor_name(processor_name, &name_len);
+	printf("Hello! from processor %s, task %d of %d, \n", processor_name, rank, size);
 	
 	if(rank == 0)
 	{
