@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
 	if(rank == 0)
 	{
 		x_countTime = MPI_Wtime();
-		x_milliseconds=x_countTime-x_startTime;
+		x_milliseconds = (x_countTime-x_startTime)*1000;
 		printf("hasil perkalian matriks AxB:\n");
 		for(i=0; i<N; i++)
 		{
