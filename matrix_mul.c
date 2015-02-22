@@ -3,13 +3,6 @@
 #include <stdlib.h>
 #include "mpi.h"
 
-float diffclock(clock_t clock1,clock_t clock2) //penghitungan waktu
-{
-    float diffticks=clock1-clock2;
-    float diffms=(diffticks)/(CLOCKS_PER_SEC/1000);
-    return diffms;
-}
-
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {
@@ -29,7 +22,7 @@ int main(int argc, char *argv[])
 
 	int i, j, k;
 	double x_milliseconds=0.0;
-	clock_t x_startTime,x_countTime;
+	double x_startTime,x_countTime;
 	
 	if(rank == 0)
 	{
@@ -66,7 +59,7 @@ int main(int argc, char *argv[])
 			printf("\n");
 		}
 		printf("\n");
-		x_startTime=clock();
+		x_startTime = MPI_Wtime();
 	}
 	else
 	{
@@ -100,8 +93,8 @@ int main(int argc, char *argv[])
 
 	if(rank == 0)
 	{
-		x_countTime=clock();
-		x_milliseconds=diffclock(x_countTime,x_startTime);
+		x_countTime = MPI_Wtime();
+		x_milliseconds=x_countTime-x_startTime;
 		printf("hasil perkalian matriks AxB:\n");
 		for(i=0; i<N; i++)
 		{
