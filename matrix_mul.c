@@ -1,12 +1,20 @@
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "mpi.h"
+
+float diffclock(clock_t clock1,clock_t clock2) //penghitungan waktu
+{
+    float diffticks=clock1-clock2;
+    float diffms=(diffticks)/(CLOCKS_PER_SEC/1000);
+    return diffms;
+}
 
 int main(int argc, char *argv[])
 {
 	int N;
 	
-	int* a = NULL;
+	int *a = NULL;
 	int *b = NULL;
 	int *c = NULL;
 
@@ -16,24 +24,43 @@ int main(int argc, char *argv[])
 	MPI_Comm_size(MPI_COMM_WORLD, &size);
 
 	int i, j, k;
-
+	float x_milliseconds=0.0;
+	clock_t x_startTime,x_countTime;
 	
 	if(rank == 0)
 	{
+		srand(time(NULL));
+		printf("masukkan ukuran matriks: ");
 		scanf("%d", &N);
 		MPI_Bcast(&N, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
 		a = malloc(N*N*sizeof(int));
 		for(i=0; i<N; i++)
 			for(j=0; j<N; j++)
-				scanf("%d", a+(i*N)+j);
+				a[i*N + j] = (rand()%19)-9;
 		
 		b = malloc(N*N*sizeof(int));
 		for(i=0; i<N; i++)
 			for(j=0; j<N; j++)
-				scanf("%d", b+(i*N)+j);
+				b[i*N + j] = (rand()%19)-9;
 
 		c = malloc(N*N*sizeof(int));
+
+		printf("matriks A:\n");
+		for(i=0; i<N; i++)
+		{
+			for(j=0; j<N; j++)
+				printf("%d ", a[(i*N)+j]);
+			printf("\n");
+		}
+		printf("matriks B:\n");
+		for(i=0; i<N; i++)
+		{
+			for(j=0; j<N; j++)
+				printf("%d ", b[(i*N)+j]);
+			printf("\n");
+		}
+		x_startTime=clock();
 	}
 	else
 	{
@@ -67,12 +94,16 @@ int main(int argc, char *argv[])
 
 	if(rank == 0)
 	{
+		x_countTime=clock();
+		x_milliseconds=diffclock(x_countTime,x_startTime);
+		printf("hasil perkalian matriks AxB:\n");
 		for(i=0; i<N; i++)
 		{
 			for(j=0; j<N; j++)
 				printf("%d ", c[(i*N)+j]);
 			printf("\n");
 		}
+		printf("waktu perhitungan: %f milisecond(s)\n", x_milliseconds);
 	}
 
 	MPI_Finalize();
