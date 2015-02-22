@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 	MPI_Comm_size(MPI_COMM_WORLD, &size);
 
 	int i, j, k;
-	float x_milliseconds=0.0;
+	double x_milliseconds=0.0;
 	clock_t x_startTime,x_countTime;
 	
 	if(rank == 0)
