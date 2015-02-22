@@ -68,7 +68,10 @@ int main(int argc, char *argv[])
 	}
 
 	//elements per process
-	int epp = N*N/size;
+	int epp = (N*N)/size;
+	if ((N*N)%size==0)	{
+		epp += 1;
+	}
 
 	// create a buffer that will hold the rows
 	int *row = malloc(sizeof(int) * epp);
