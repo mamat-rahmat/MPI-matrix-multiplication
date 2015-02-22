@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 
 	//elements per process
 	int epp = (N*N)/size;
-	if ((N*N)%size==0)	{
+	if ((N*N)%size!=0)	{
 		epp += 1;
 	}
 
