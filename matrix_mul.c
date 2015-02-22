@@ -27,17 +27,11 @@ int main(int argc, char *argv[])
 		int i, j, k;
 		double x_milliseconds=0.0;
 		double x_startTime,x_countTime;
-
-		char processor_name[MPI_MAX_PROCESSOR_NAME];
-		int name_len;
-		MPI_Get_processor_name(processor_name, &name_len);
-		printf("Hello! from processor %s, task %d of %d, \n", processor_name, rank, size);
-		
+	
 		if(rank == 0)
 		{
 			system("clear");
 			srand(time(NULL));
-			printf("ukuran matriks: %d\n", N);
 			MPI_Bcast(&N, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
 			a = malloc(N*N*sizeof(int));
@@ -51,23 +45,6 @@ int main(int argc, char *argv[])
 					b[i*N + j] = (rand()%19)-9;
 
 			c = malloc(N*N*sizeof(int));
-
-			printf("matriks A:\n");
-			for(i=0; i<N; i++)
-			{
-				for(j=0; j<N; j++)
-					printf("%d ", a[(i*N)+j]);
-				printf("\n");
-			}
-			printf("\n");
-			printf("matriks B:\n");
-			for(i=0; i<N; i++)
-			{
-				for(j=0; j<N; j++)
-					printf("%d ", b[(i*N)+j]);
-				printf("\n");
-			}
-			printf("\n");
 			x_startTime = MPI_Wtime();
 		}
 		else
@@ -75,7 +52,6 @@ int main(int argc, char *argv[])
 			MPI_Bcast(&N, 1, MPI_INT, 0, MPI_COMM_WORLD);
 			b = malloc(N*N*sizeof(int));
 		}
-
 
 		//elements per process
 		int epp = (N*N)/size;
@@ -113,7 +89,6 @@ int main(int argc, char *argv[])
 				printf("\n");
 			}
 			printf("waktu perhitungan: %f milisecond(s)\n", x_milliseconds);
-			printf("jumlah elemen per proses: %d\n", epp);
 		}
 	}
 
